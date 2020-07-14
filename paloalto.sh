@@ -2,6 +2,8 @@
 
 export rg="az100"
 export location="westus2"
+export admin="superman"
+export password="P@ssw0rd5678"
 
 #Create Resource Group
 echo "Creating Resource Group"
@@ -39,3 +41,26 @@ az network nsg rule create -g $rg --nsg-name mgmtnsg -n mgmtaccess --priority 11
 #Add Network Security Group to MGMT NIC
 echo "Add NIC to NSG"
 az network nic update -g $rg -n mgmtnic1 --network-security-group mgmtnsg
+
+#Attach Public IP to MGMT NIC
+echo "Attach Public IP to NIC"
+az network nic ip-config update -g $rg --nic-name mgmtnic1 -n ipconfig1 --public-ip-address mgmtpip
+#Note: At this time the VM-Series only supports a mgmt interface with public IP allocation when using availability zones.
+
+#Create VM-Series and Assign NICs During Deployment
+echo "Create Palo Alto VM"
+az vm create --resource-group $rg --name vmfw1 --location $location --nics mgmtnic1 untrustnic1 trustnic1 --size Standard_D3_V2 --image paloaltonetworks:vmseries1:bundle1:latest --plan-name bundle1 --plan-product vmseries1 --plan-publisher paloaltonetworks --admin-username $admin --admin-password $password --zone 2
+
+ipaddress=$(az vm show \
+  --name vmfw1 \
+  --resource-group az100 \
+  --show-details \
+  --query [publicIps] \
+  --output tsv)
+
+echo "=========================================="
+echo "Palo Alto Firewall has been created"
+echo "URL: https://$ipaddress"
+echo "Username: $admin"
+echo "Username: $password"
+echo "=========================================="
