@@ -3,7 +3,7 @@
 export rg="az100"
 export location="westus2"
 export admin="superman"
-export password="P@ssw0rd5678"
+export password="P@ssw0rd$RANDOM"
 
 #Create Resource Group
 echo "Creating Resource Group"
