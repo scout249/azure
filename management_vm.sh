@@ -15,7 +15,9 @@ az vm create \
   --admin-password $password
   --nics mgmtnic1 untrustnic1 trustnic1
   --size Standard_D3_V2
-  
+
+#Install Chrome and Putty
+echo "Installing Chrome and Putty"
 az vm run-command invoke --command-id RunPowerShellScript --name myvm -g $rg  \
     --scripts 'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString("https://chocolatey.org/install.ps1"))' \
     'choco install googlechrome' \
