@@ -23,7 +23,15 @@ az network vnet subnet create --resource-group $rg --vnet-name "${rg}vnet" --nam
 echo "Creating Network Interface"
 az network nic create --resource-group $rg --location $location --name "mgmtnic${uniqueid}" --vnet-name "${rg}vnet" --subnet mgmt
 az network nic create --resource-group $rg --location $location --name "untrustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet untrust
-az network nic create --resource-group $rg --location $location --name "trustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet trust 
+az network nic create --resource-group $rg --location $location --name "trustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet trust
+
+#Create a Public IP Address. This will be used for the Management Interface of the VM-Series. 
+echo "Creating Public IP"
+az network public-ip create --name mgmtvmpip --resource-group $rg --location $location --dns-name mgmtdns --allocation-method Dynamic
+
+#Attach Public IP to MGMT NIC
+echo "Attach Public IP to NIC"
+az network nic ip-config update -g $rg --nic-name "mgmtnic${uniqueid}" -n ipconfig1 --public-ip-address mgmtvmpip
 
 #Create Virtual Machine
 echo "Creating Virtual Machine"
