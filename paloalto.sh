@@ -4,6 +4,7 @@ export rg="az100"
 export location="westus2"
 export admin="superman"
 export password="P@ssw0rd$RANDOM"
+export uniqueid=$RANDOM
 
 #Create Resource Group
 echo "Creating Resource Group"
@@ -26,9 +27,9 @@ az network public-ip create --name mgmtpip --resource-group $rg --location $loca
 
 #Create and Configure Multiple Network Interfaces
 echo "Creating Network Interface"
-az network nic create --resource-group $rg --location $location --name mgmtnic1 --vnet-name "${rg}vnet" --subnet mgmt
-az network nic create --resource-group $rg --location $location --name untrustnic1 --vnet-name "${rg}vnet" --subnet untrust
-az network nic create --resource-group $rg --location $location --name trustnic1 --vnet-name "${rg}vnet" --subnet trust 
+az network nic create --resource-group $rg --location $location --name "mgmtnic${uniqueid}" --vnet-name "${rg}vnet" --subnet mgmt
+az network nic create --resource-group $rg --location $location --name "untrustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet untrust
+az network nic create --resource-group $rg --location $location --name "trustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet trust
 
 #Create Network Security Groups
 echo "Creating Network Security Group"
@@ -40,16 +41,16 @@ az network nsg rule create -g $rg --nsg-name mgmtnsg -n mgmtaccess --priority 11
 
 #Add Network Security Group to MGMT NIC
 echo "Add NIC to NSG"
-az network nic update -g $rg -n mgmtnic1 --network-security-group mgmtnsg
+az network nic update -g $rg -n "mgmtnic${uniqueid}" --network-security-group mgmtnsg
 
 #Attach Public IP to MGMT NIC
 echo "Attach Public IP to NIC"
-az network nic ip-config update -g $rg --nic-name mgmtnic1 -n ipconfig1 --public-ip-address mgmtpip
+az network nic ip-config update -g $rg --nic-name "mgmtnic${uniqueid}" -n ipconfig1 --public-ip-address mgmtpip
 #Note: At this time the VM-Series only supports a mgmt interface with public IP allocation when using availability zones.
 
 #Create VM-Series and Assign NICs During Deployment
 echo "Create Palo Alto VM"
-az vm create --resource-group $rg --name vmfw1 --location $location --nics mgmtnic1 untrustnic1 trustnic1 --size Standard_D3_V2 --image paloaltonetworks:vmseries1:bundle1:latest --plan-name bundle1 --plan-product vmseries1 --plan-publisher paloaltonetworks --admin-username $admin --admin-password $password --zone 2
+az vm create --resource-group $rg --name vmfw1 --location $location --nics "mgmtnic${uniqueid}" "untrustnic2${uniqueid}" "trustnic2${uniqueid}" --size Standard_D3_V2 --image paloaltonetworks:vmseries1:bundle1:latest --plan-name bundle1 --plan-product vmseries1 --plan-publisher paloaltonetworks --admin-username $admin --admin-password $password --zone 2
 
 ipaddress=$(az vm show \
   --name vmfw1 \
