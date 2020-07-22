@@ -52,7 +52,7 @@ az network nic ip-config update -g $rg --nic-name "untrustnic${uniqueid}" -n ipc
 
 #Create VM-Series and Assign NICs During Deployment
 echo "Create Palo Alto VM"
-az vm create --resource-group $rg --name vmfw1 --location $location --nics "mgmtnic${uniqueid}" "untrustnic${uniqueid}" "trustnic${uniqueid}" "dmznic${uniqueid}"--size Standard_D3_V2 --image paloaltonetworks:vmseries1:bundle1:latest --plan-name bundle1 --plan-product vmseries1 --plan-publisher paloaltonetworks --admin-username $admin --admin-password $password --zone 2
+az vm create --resource-group $rg --name vmfw1 --location $location --nics "mgmtnic${uniqueid}" "untrustnic${uniqueid}" "trustnic${uniqueid}" "dmznic${uniqueid}" --size Standard_D3_V2 --image paloaltonetworks:vmseries1:bundle1:latest --plan-name bundle1 --plan-product vmseries1 --plan-publisher paloaltonetworks --admin-username $admin --admin-password $password --zone 2
 
 ipaddress=$(az vm show \
   --name vmfw1 \
