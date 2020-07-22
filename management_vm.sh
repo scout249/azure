@@ -41,8 +41,8 @@ az vm create \
 echo "Installing Chrome and Putty"
 az vm run-command invoke --command-id RunPowerShellScript --name myvm -g $rg  \
     --scripts 'Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString("https://chocolatey.org/install.ps1"))' \
-    'choco install googlechrome' \
-    'choco install putty'
+    'choco install googlechrome -y' \
+    'choco install putty -y'
   
 echo "=========================================="
 echo "VM has been created"
