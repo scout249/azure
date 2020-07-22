@@ -23,7 +23,7 @@ az network vnet subnet create --resource-group $rg --vnet-name "${rg}vnet" --nam
 
 #Create a Public IP Address. This will be used for the Management Interface of the VM-Series. 
 echo "Creating Public IP"
-az network public-ip create --name mgmtpip --resource-group $rg --location $location --dns-name "mgmtdns${uniqueid}" --allocation-method Dynamic --zone 2
+az network public-ip create --name untrustpip --resource-group $rg --location $location --dns-name "untrustdns${uniqueid}" --allocation-method Dynamic --zone 2
 #Notice the --zone flag. This is because the Public IP address used on a VM-Series in an Availability Zone in Azure must have the exact same amount of zones assigned to it. 
 
 #Create and Configure Multiple Network Interfaces
@@ -45,9 +45,9 @@ az network nsg rule create -g $rg --nsg-name mgmtnsg -n mgmtaccess --priority 11
 echo "Add NIC to NSG"
 az network nic update -g $rg -n "mgmtnic${uniqueid}" --network-security-group mgmtnsg
 
-#Attach Public IP to MGMT NIC
+#Attach Public IP to Untrust NIC
 echo "Attach Public IP to NIC"
-az network nic ip-config update -g $rg --nic-name "mgmtnic${uniqueid}" -n ipconfig1 --public-ip-address mgmtpip
+az network nic ip-config update -g $rg --nic-name "untrustnic${uniqueid}" -n ipconfig1 --public-ip-address untrustpip
 #Note: At this time the VM-Series only supports a mgmt interface with public IP allocation when using availability zones.
 
 #Create VM-Series and Assign NICs During Deployment
