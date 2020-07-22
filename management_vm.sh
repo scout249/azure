@@ -2,10 +2,22 @@ export rg="az100"
 export location="westus2"
 export admin="superman"
 export password="P@ssw0rd$RANDOM"
+export uniqueid=$RANDOM
 
 
 #Create Resource Group
 echo "Creating Resource Group"
+az group create --name $rg --location $location
+
+#Create Virtual Machine
+echo "Creating Virtual Machine"
+
+#Create and Configure Multiple Network Interfaces
+echo "Creating Network Interface"
+az network nic create --resource-group $rg --location $location --name "mgmtnic${uniqueid}" --vnet-name "${rg}vnet" --subnet mgmt
+az network nic create --resource-group $rg --location $location --name "untrustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet untrust
+az network nic create --resource-group $rg --location $location --name "trustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet trust 
+
 az vm create \
   --resource-group $rg \
   --location $location \
@@ -13,7 +25,7 @@ az vm create \
   --image MicrosoftWindowsDesktop:Windows-10:20h1-pro:19041.388.2007101729 \
   --admin-username $admin \
   --admin-password $password
-  --nics mgmtnic1 untrustnic1 trustnic1
+  --nics "mgmtnic${uniqueid}" "untrustnic2${uniqueid}" "trustnic2${uniqueid}"
   --size Standard_D3_V2
 
 #Install Chrome and Putty
