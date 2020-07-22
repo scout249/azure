@@ -22,7 +22,7 @@ az network vnet subnet create --resource-group $rg --vnet-name "${rg}vnet" --nam
 
 #Create a Public IP Address. This will be used for the Management Interface of the VM-Series. 
 echo "Creating Public IP"
-az network public-ip create --name mgmtpip --resource-group $rg --location $location --dns-name "mgmtdns${rg}" --allocation-method Dynamic --zone 2
+az network public-ip create --name mgmtpip --resource-group $rg --location $location --dns-name "mgmtdns${uniqueid}" --allocation-method Dynamic --zone 2
 #Notice the --zone flag. This is because the Public IP address used on a VM-Series in an Availability Zone in Azure must have the exact same amount of zones assigned to it. 
 
 #Create and Configure Multiple Network Interfaces
