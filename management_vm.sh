@@ -47,7 +47,7 @@ az vm create \
   
 echo "=========================================="
 echo "VM has been created"
-echo "$ipaddress"
+echo "Username: myVM"
 echo "Username: $admin"
 echo "Password: $password"
 echo "=========================================="
