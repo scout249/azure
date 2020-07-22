@@ -22,8 +22,8 @@ az network vnet subnet create --resource-group $rg --vnet-name "${rg}vnet" --nam
 #Create and Configure Multiple Network Interfaces
 echo "Creating Network Interface"
 az network nic create --resource-group $rg --location $location --name "mgmtnic${uniqueid}" --vnet-name "${rg}vnet" --subnet mgmt
-az network nic create --resource-group $rg --location $location --name "untrustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet untrust
-az network nic create --resource-group $rg --location $location --name "trustnic2${uniqueid}" --vnet-name "${rg}vnet" --subnet trust
+az network nic create --resource-group $rg --location $location --name "untrustnic${uniqueid}" --vnet-name "${rg}vnet" --subnet untrust
+az network nic create --resource-group $rg --location $location --name "trustnic${uniqueid}" --vnet-name "${rg}vnet" --subnet trust
 
 #Create a Public IP Address. This will be used for the Management Interface of the VM-Series. 
 echo "Creating Public IP"
@@ -42,7 +42,7 @@ az vm create \
   --image MicrosoftWindowsDesktop:Windows-10:20h1-pro:19041.388.2007101729 \
   --admin-username $admin \
   --admin-password $password \
-  --nics "mgmtnic${uniqueid}" "untrustnic2${uniqueid}" "trustnic2${uniqueid}" \
+  --nics "mgmtnic${uniqueid}" "untrustnic${uniqueid}" "trustnic${uniqueid}" \
   --size Standard_D3_V2
   
 echo "=========================================="
