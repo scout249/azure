@@ -27,7 +27,7 @@ az network nic create --resource-group $rg --location $location --name "trustnic
 
 #Create a Public IP Address. This will be used for the Management Interface of the VM-Series. 
 echo "Creating Public IP"
-az network public-ip create --name mgmtvmpip --resource-group $rg --location $location --dns-name mgmtdns --allocation-method Dynamic
+az network public-ip create --name mgmtvmpip --resource-group $rg --location $location --allocation-method Dynamic
 
 #Attach Public IP to MGMT NIC
 echo "Attach Public IP to NIC"
