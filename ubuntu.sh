@@ -11,5 +11,5 @@ az network nsg create --resource-group $resourceGroupName --name myNetworkSecuri
 az network nsg rule create --resource-group $resourceGroupName --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleSSH --protocol tcp --priority 1000 --destination-port-range 22 --access allow &&
 az network nsg rule create --resource-group $resourceGroupName --nsg-name myNetworkSecurityGroup --name myNetworkSecurityGroupRuleWeb --protocol tcp --priority 1001 --destination-port-range 80 --access allow &&
 az network nic create --resource-group $resourceGroupName --name myNic --vnet-name myVnet --subnet mySubnet --public-ip-address myPublicIP --network-security-group myNetworkSecurityGroup &&
-az vm create --resource-group $resourceGroupName --name myVM --location $location --nics myNic --image Ubuntu2204 --admin-username $username --generate-ssh-keys &&
+az vm create --resource-group $resourceGroupName --name myVM --location $location --size Standard_B1ms --nics myNic --image Ubuntu2204 --admin-username $username --generate-ssh-keys &&
 az vm show --resource-group $resourceGroupName --name myVM --show-details --query publicIps --output tsv
